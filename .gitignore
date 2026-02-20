@@ -1,0 +1,21 @@
+# backend dependencies
+backend/node_modules/
+
+# frontend dependencies
+frontend/node_modules/
+
+# env files (VERY IMPORTANT — hides passwords)
+backend/.env
+frontend/.env
+.env
+
+# logs
+npm-debug.log*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# frontend build output
+frontend/build/
+dist/
