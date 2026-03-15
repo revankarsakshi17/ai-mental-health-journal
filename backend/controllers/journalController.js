@@ -1,4 +1,4 @@
-import Journal from "./models/Journal.js";
+import Journal from "../models/journal.js";
 import { analyzeEmotion } from "../utils/emotionAnalyzer.js";
 
 export const createJournal = async (req, res) => {

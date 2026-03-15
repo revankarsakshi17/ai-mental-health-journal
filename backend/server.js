@@ -2,19 +2,19 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
-import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import journalRoutes from "./routes/journalRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 
 dotenv.config();
 
-connectDB();
+connectDB();  
 
 const app = express();
 
 app.use(express.json());
 
-app.use("/api/users", userRoutes);
+app.use("/api/users", authRoutes);
 app.use("/api/journal", journalRoutes);
 app.use("/api/ai", aiRoutes);
 

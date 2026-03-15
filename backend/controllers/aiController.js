@@ -1,4 +1,4 @@
-import Journal from "./models/Journal.js";
+import Journal from "../models/journal.js";
 
 export const getMoodStats = async (req, res) => {
 
