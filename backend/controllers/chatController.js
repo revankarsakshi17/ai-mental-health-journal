@@ -1,11 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Journal from "../models/journal.js";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 // POST /api/ai/chat
 export const chat = async (req, res) => {
   try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const { messages } = req.body;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
@@ -35,7 +34,7 @@ USER'S RECENT JOURNAL CONTEXT:
 ${journalContext}`;
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       systemInstruction,
     });
 
