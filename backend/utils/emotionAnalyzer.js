@@ -4,11 +4,9 @@ export const analyzeEmotion = async (text) => {
   try {
     // ✅ Move these INSIDE the function so .env is already loaded
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
-console.log("=== GEMINI DEBUG ===");
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash"});
+    console.log("=== GEMINI DEBUG ===");
     console.log("API KEY:", process.env.GEMINI_API_KEY?.slice(0, 15));
-
-   
     const prompt = `You are an expert emotion and sentiment analyst. Analyze this journal entry and respond ONLY with valid JSON — no markdown, no backticks, no explanation.
 
 Return JSON with exactly these keys:
