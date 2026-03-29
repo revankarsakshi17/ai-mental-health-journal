@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dear Mind</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body {
+      background: var(--bg-dark-gradient);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .glow {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(168, 85, 247, 0.3);
+      filter: blur(80px);
+      z-index: 0;
+    }
+
+    .splash-logo {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      z-index: 1;
+      animation: pulse 2s infinite;
+    }
+
+    .splash-title {
+      color: white;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 6px;
+      z-index: 1;
+      margin-top: 16px;
+    }
+
+    .splash-subtitle {
+      color: #e9d5ff;
+      font-size: 16px;
+      z-index: 1;
+      margin-top: 8px;
+    }
+
+    .splash-tagline {
+      color: #c4b5fd;
+      font-size: 13px;
+      margin-top: 60px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-loader {
+      display: flex;
+      gap: 4px;
+    }
+
+    .dot-loader span {
+      width: 6px;
+      height: 6px;
+      background: #c4b5fd;
+      border-radius: 50%;
+      animation: bounce 0.8s infinite alternate;
+    }
+
+    .dot-loader span:nth-child(2) { animation-delay: 0.2s; }
+    .dot-loader span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      from { transform: translateY(0); opacity: 0.4; }
+      to   { transform: translateY(-6px); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <img src="../assets/logo.png" alt="Dear Mind" class="splash-logo" />
+  <h1 class="splash-title">DEAR MIND</h1>
+  <p class="splash-subtitle">💭 Your safe space to reflect</p>
+  <div class="splash-tagline">
+    Preparing your journal
+    <div class="dot-loader">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <script>
+    // Auto redirect to login after 3 seconds
+    setTimeout(() => {
+      window.location.href = './login.html';
+    }, 3000);
+  </script>
+</body>
+</html>
