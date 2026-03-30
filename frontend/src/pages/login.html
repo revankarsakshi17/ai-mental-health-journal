@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dear Mind - Login</title>
+  <link rel="icon" type="image/png" href="../assets/logo.png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body {
+      background: linear-gradient(160deg, #e8e0ff 0%, #d4c5f9 50%, #b39ddb 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-top {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px;
+    }
+
+    .logo-top img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+
+    .content {
+      flex: 1;
+      padding: 10px 32px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .title {
+      font-size: 38px;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #4a4a6a;
+      margin-bottom: 40px;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-wrap {
+      width: 78%;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    #error-msg {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo top right -->
+  <div class="logo-top">
+    <img src="../assets/logo.png" alt="Dear Mind" />
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h1 class="title">Login</h1>
+    <p class="subtitle">
+      Don't have an account?
+      <a href="./register.html">sign up</a>
+    </p>
+
+    <!-- Error message -->
+    <p class="error-msg" id="error-msg"></p>
+
+    <!-- Form -->
+    <div class="form">
+      <div class="input-wrap">
+        <input
+          class="input"
+          type="email"
+          id="email"
+          placeholder="email"
+          required
+        />
+      </div>
+      <div class="input-wrap">
+        <input
+          class="input"
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+        />
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="login-btn" onclick="handleLogin()">
+          Login
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { loginUser } from '../js/api.js';
+    import { saveAuth, isLoggedIn } from '../js/auth.js';
+
+    // If already logged in → go to home
+    if (isLoggedIn()) {
+      window.location.href = './home.html';
+    }
+
+    window.handleLogin = async () => {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const btn = document.getElementById('login-btn');
+      const errorMsg = document.getElementById('error-msg');
+
+      // Hide previous error
+      errorMsg.style.display = 'none';
+
+      // Validate
+      if (!email || !password) {
+        errorMsg.textContent = 'Please fill in all fields.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      // Loading state
+      btn.textContent = 'Logging in...';
+      btn.disabled = true;
+
+      try {
+        const data = await loginUser(email, password);
+
+        if (data.token) {
+          // Save token and user
+          saveAuth(data.token, { name: data.name, email: data.email });
+          // Go to home
+          window.location.href = './home.html';
+        } else {
+          errorMsg.textContent = data.message || 'Login failed. Try again.';
+          errorMsg.style.display = 'block';
+        }
+      } catch (err) {
+        errorMsg.textContent = 'Something went wrong. Please try again.';
+        errorMsg.style.display = 'block';
+      } finally {
+        btn.textContent = 'Login';
+        btn.disabled = false;
+      }
+    };
+
+    // Allow Enter key to submit
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+
+</body>
+</html>
