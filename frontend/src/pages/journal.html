@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dear Mind - Journal</title>
+  <link rel="icon" type="image/png" href="../assets/logo.png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body {
+      background: #f3f0ff;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px;
+      background: linear-gradient(160deg, #4c1d95, #7c3aed);
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .sidebar-logo img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .sidebar-logo span {
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    .sidebar-item.active {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-weight: 700;
+    }
+
+    .sidebar-logout {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      width: 100%;
+    }
+
+    .sidebar-logout:hover {
+      background: rgba(255,0,0,0.15);
+      color: #fca5a5;
+    }
+
+    /* ── Mobile Header ── */
+    .mobile-header {
+      display: none;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      padding: 16px 20px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mobile-header img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .mobile-header span {
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    /* ── Main Content ── */
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 30px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #4c1d95;
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Two column layout ── */
+    .journal-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── Write Card ── */
+    .write-card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.08);
+    }
+
+    .write-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #4c1d95;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .char-count {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-left: auto;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 280px;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid #e9d5ff;
+      background: #faf5ff;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      color: #1f2937;
+      resize: none;
+      outline: none;
+      line-height: 1.8;
+      transition: border 0.2s;
+      box-sizing: border-box;
+    }
+
+    textarea:focus {
+      border-color: #7c3aed;
+      background: white;
+    }
+
+    textarea::placeholder {
+      color: #c4b5fd;
+    }
+
+    /* Buttons row */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .btn-save {
+      flex: 1;
+      padding: 14px;
+      border-radius: 30px;
+      border: none;
+      background: linear-gradient(135deg, #9b59b6, #7c3aed);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(124,58,237,0.4);
+    }
+
+    .btn-save:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-clear {
+      padding: 14px 20px;
+      border-radius: 30px;
+      border: 2px solid #e9d5ff;
+      background: transparent;
+      color: #7c3aed;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-clear:hover {
+      background: #f3e8ff;
+    }
+
+    /* ── Results Card ── */
+    .results-card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.08);
+    }
+
+    .results-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #4c1d95;
+      margin-bottom: 20px;
+    }
+
+    /* Empty state */
+    .results-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: #c4b5fd;
+    }
+
+    .results-empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .results-empty p { font-size: 13px; color: #9ca3af; }
+
+    /* Loader */
+    .analyzing-state {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .analyzing-state .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e9d5ff;
+      border-top-color: #7c3aed;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    .analyzing-state p {
+      color: #7c3aed;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Emotion header */
+    .emotion-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+    }
+
+    .emotion-emoji { font-size: 48px; }
+
+    .emotion-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #4c1d95;
+      text-transform: capitalize;
+    }
+
+    .sentiment-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .badge-positive { background: #dcfce7; color: #16a34a; }
+    .badge-negative { background: #fee2e2; color: #dc2626; }
+    .badge-neutral  { background: #f3f4f6; color: #6b7280; }
+
+    /* Summary */
+    .summary-box {
+      background: #faf5ff;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.7;
+      font-style: italic;
+      border-left: 3px solid #7c3aed;
+    }
+
+    /* Emotion bars */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #9ca3af;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .emotion-bar-wrap {
+      margin-bottom: 8px;
+    }
+
+    .emotion-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .emotion-bar-bg {
+      height: 6px;
+      background: #f3e8ff;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .emotion-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.8s ease;
+    }
+
+    /* Themes */
+    .themes-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .theme-tag {
+      padding: 4px 12px;
+      background: #f3e8ff;
+      color: #7c3aed;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Suggestions */
+    .suggestion-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    .suggestion-num {
+      color: #7c3aed;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Error */
+    .error-msg {
+      display: none;
+      color: #dc2626;
+      font-size: 13px;
+      margin-top: 10px;
+      background: #fee2e2;
+      padding: 8px 14px;
+      border-radius: 10px;
+    }
+
+    /* Success */
+    .success-msg {
+      display: none;
+      color: #16a34a;
+      font-size: 13px;
+      margin-top: 10px;
+      background: #dcfce7;
+      padding: 8px 14px;
+      border-radius: 10px;
+    }
+
+    /* ── Mobile Bottom Nav ── */
+    .bottom-nav { display: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+
+      .mobile-header { display: flex !important; }
+
+      .main-content {
+        margin-left: 0;
+        padding: 16px;
+        padding-bottom: 90px;
+      }
+
+      .journal-layout { grid-template-columns: 1fr; }
+
+      .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(243,240,255,0.97);
+        backdrop-filter: blur(10px);
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0 16px;
+        border-top: 1px solid #e9d5ff;
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        text-decoration: none;
+        color: #9ca3af;
+        font-size: 10px;
+        font-weight: 500;
+      }
+
+      .nav-item.active { color: #7c3aed; }
+      .nav-icon { font-size: 22px; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../assets/logo.png" alt="Dear Mind" />
+      <span>Dear Mind 💭</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="./home.html" class="sidebar-item">
+        <span>🏠</span> Home
+      </a>
+      <a href="./journal.html" class="sidebar-item active">
+        <span>✍️</span> Write Journal
+      </a>
+      <a href="./dashboard.html" class="sidebar-item">
+        <span>📊</span> Dashboard
+      </a>
+      <a href="./history.html" class="sidebar-item">
+        <span>📋</span> History
+      </a>
+      <a href="./chat.html" class="sidebar-item">
+        <span>🤖</span> AI Chat
+      </a>
+    </nav>
+    <button class="sidebar-logout" onclick="handleLogout()">
+      <span>🚪</span> Logout
+    </button>
+  </aside>
+
+  <!-- ── Mobile Header ── -->
+  <div class="mobile-header">
+    <img src="../assets/logo.png" alt="Dear Mind" />
+    <span>Dear Mind 💭</span>
+  </div>
+
+  <!-- ── Main Content ── -->
+  <main class="main-content">
+
+    <h1 class="page-title">✍️ Write Today's Journal</h1>
+    <p class="page-sub" id="today-date"></p>
+
+    <div class="journal-layout">
+
+      <!-- Write Card -->
+      <div class="write-card">
+        <div class="write-card-title">
+          📝 What's on your mind?
+          <span class="char-count" id="char-count">0 characters</span>
+        </div>
+
+        <textarea
+          id="journal-text"
+          placeholder="Write freely… How are you feeling today? What happened? What's on your mind?"
+          oninput="updateCharCount()"
+        ></textarea>
+
+        <p class="error-msg"  id="error-msg"></p>
+        <p class="success-msg" id="success-msg"></p>
+
+        <div class="btn-row">
+          <button class="btn-save" id="save-btn" onclick="handleSubmit()">
+            ✦ Analyse & Save
+          </button>
+          <button class="btn-clear" onclick="clearEntry()">
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Card -->
+      <div class="results-card" id="results-card">
+        <p class="results-title">🧠 AI Analysis</p>
+
+        <!-- Empty state -->
+        <div class="results-empty" id="results-empty">
+          <div class="empty-icon">🌸</div>
+          <p>Write your journal entry and click<br/><strong>Analyse & Save</strong> to see AI insights</p>
+        </div>
+
+        <!-- Analyzing state -->
+        <div class="analyzing-state" id="analyzing-state" style="display:none;">
+          <div class="spinner"></div>
+          <p>Gemini AI is analyzing your entry...</p>
+        </div>
+
+        <!-- Results -->
+        <div id="results-content" style="display:none;" class="fade-in">
+
+          <!-- Emotion header -->
+          <div class="emotion-header" id="emotion-header">
+            <span class="emotion-emoji" id="result-emoji">😐</span>
+            <div>
+              <div class="emotion-name" id="result-emotion">neutral</div>
+              <span class="sentiment-badge" id="result-badge">Neutral</span>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <p class="summary-box" id="result-summary"></p>
+
+          <!-- Emotion bars -->
+          <p class="section-label">Emotion Breakdown</p>
+          <div id="emotion-bars" style="margin-bottom:16px;"></div>
+
+          <!-- Themes -->
+          <p class="section-label">Themes</p>
+          <div class="themes-wrap" id="result-themes"></div>
+
+          <!-- Suggestions -->
+          <p class="section-label">✦ AI Suggestions</p>
+          <div id="result-suggestions"></div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Mobile Bottom Nav -->
+<nav class="bottom-nav">
+  <a href="./home.html" class="nav-item">
+    <span class="nav-icon">🏠</span> Home
+  </a>
+  <a href="./journal.html" class="nav-item active">
+    <span class="nav-icon">✍️</span> Write
+  </a>
+  <a href="./dashboard.html" class="nav-item">
+    <span class="nav-icon">📊</span> Stats
+  </a>
+  <a href="./history.html" class="nav-item">
+    <span class="nav-icon">📋</span> History
+  </a>
+  <a href="./chat.html" class="nav-item">
+    <span class="nav-icon">🤖</span> Chat
+  </a>
+</nav>
+
+<script type="module">
+  import { createJournal } from '../js/api.js';
+  import { requireAuth, logout } from '../js/auth.js';
+  import { getEmotionEmoji, getEmotionColor } from '../js/utils.js';
+
+  // Protect page
+  requireAuth();
+
+  // Today's date
+  document.getElementById('today-date').textContent = new Date().toDateString();
+
+  // Logout
+  window.handleLogout = () => logout();
+
+  // Char count
+  window.updateCharCount = () => {
+    const len = document.getElementById('journal-text').value.length;
+    document.getElementById('char-count').textContent = `${len} characters`;
+  };
+
+  // Clear entry
+  window.clearEntry = () => {
+    document.getElementById('journal-text').value = '';
+    document.getElementById('char-count').textContent = '0 characters';
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'none';
+    document.getElementById('results-empty').style.display = 'block';
+    document.getElementById('results-content').style.display = 'none';
+    document.getElementById('analyzing-state').style.display = 'none';
+  };
+
+  // Submit journal
+  window.handleSubmit = async () => {
+    const text = document.getElementById('journal-text').value.trim();
+    const btn  = document.getElementById('save-btn');
+    const err  = document.getElementById('error-msg');
+    const succ = document.getElementById('success-msg');
+
+    err.style.display  = 'none';
+    succ.style.display = 'none';
+
+    if (!text) {
+      err.textContent = 'Please write something before saving.';
+      err.style.display = 'block';
+      return;
+    }
+
+    if (text.length < 10) {
+      err.textContent = 'Please write at least 10 characters.';
+      err.style.display = 'block';
+      return;
+    }
+
+    // Show analyzing state
+    btn.disabled = true;
+    btn.textContent = 'Analyzing...';
+    document.getElementById('results-empty').style.display    = 'none';
+    document.getElementById('results-content').style.display  = 'none';
+    document.getElementById('analyzing-state').style.display  = 'block';
+
+    try {
+      const data = await createJournal(text);
+
+      if (data._id) {
+        succ.textContent = '✅ Journal saved successfully!';
+        succ.style.display = 'block';
+        showResults(data);
+      } else {
+        err.textContent = data.message || 'Failed to save journal.';
+        err.style.display = 'block';
+        document.getElementById('results-empty').style.display   = 'block';
+        document.getElementById('analyzing-state').style.display = 'none';
+      }
+    } catch (e) {
+      err.textContent = 'Something went wrong. Please try again.';
+      err.style.display = 'block';
+      document.getElementById('results-empty').style.display   = 'block';
+      document.getElementById('analyzing-state').style.display = 'none';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '✦ Analyse & Save';
+    }
+  };
+
+  // Show AI results
+  const showResults = (data) => {
+    document.getElementById('analyzing-state').style.display  = 'none';
+    document.getElementById('results-content').style.display  = 'block';
+
+    // Emotion header
+    const emoji = getEmotionEmoji(data.primaryEmotion);
+    const color = getEmotionColor(data.primaryEmotion);
+    document.getElementById('result-emoji').textContent   = emoji;
+    document.getElementById('result-emotion').textContent = data.primaryEmotion || 'neutral';
+    document.getElementById('emotion-header').style.background =
+      color + '18';
+
+    // Sentiment badge
+    const badge = document.getElementById('result-badge');
+    badge.textContent = `${data.sentimentLabel} (${data.sentimentScore > 0 ? '+' : ''}${data.sentimentScore})`;
+    badge.className = `sentiment-badge badge-${(data.sentimentLabel || 'neutral').toLowerCase()}`;
+
+    // Summary
+    document.getElementById('result-summary').textContent =
+      `"${data.summary || 'No summary available.'}"`;
+
+    // Emotion bars
+    const barsContainer = document.getElementById('emotion-bars');
+    const emotions = data.emotions || {};
+    barsContainer.innerHTML = Object.entries(emotions)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([em, score]) => `
+        <div class="emotion-bar-wrap">
+          <div class="emotion-bar-header">
+            <span>${getEmotionEmoji(em)} ${em}</span>
+            <span>${score}%</span>
+          </div>
+          <div class="emotion-bar-bg">
+            <div class="emotion-bar-fill"
+              style="width:${score}%; background:${getEmotionColor(em)};">
+            </div>
+          </div>
+        </div>`).join('');
+
+    // Themes
+    const themesContainer = document.getElementById('result-themes');
+    themesContainer.innerHTML = (data.themes || [])
+      .map(t => `<span class="theme-tag">#${t}</span>`).join('');
+
+    // Suggestions
+    const suggestionsContainer = document.getElementById('result-suggestions');
+    suggestionsContainer.innerHTML = (data.suggestions || [])
+      .map((s, i) => `
+        <div class="suggestion-item">
+          <span class="suggestion-num">${i + 1}.</span>
+          <span>${s}</span>
+        </div>`).join('');
+  };
+</script>
+
+</body>
+</html>

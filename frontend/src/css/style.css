@@ -29,10 +29,8 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: var(--bg-gradient);
+  background: #f3f0ff;
   color: var(--text-dark);
-  max-width: 480px;
-  margin: 0 auto;
   min-height: 100vh;
   position: relative;
 }
