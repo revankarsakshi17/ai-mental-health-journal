@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dear Mind - Nova</title>
+  <link rel="icon" type="image/png" href="../assets/logo.png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body {
+      background: #f3f0ff;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px;
+      background: linear-gradient(160deg, #4c1d95, #7c3aed);
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .sidebar-logo img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .sidebar-logo span {
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    .sidebar-item.active {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-weight: 700;
+    }
+
+    .sidebar-logout {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      width: 100%;
+    }
+
+    .sidebar-logout:hover {
+      background: rgba(255,0,0,0.15);
+      color: #fca5a5;
+    }
+
+    /* ── Mobile Header ── */
+    .mobile-header {
+      display: none;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      padding: 16px 20px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mobile-header img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .mobile-header span {
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    /* ── Main Content ── */
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #4c1d95;
+      margin-bottom: 4px;
+      flex-shrink: 0;
+    }
+
+    .page-sub {
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── Chat Layout ── */
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ── Left Panel ── */
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* AI info card */
+    .ai-card {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+
+    .ai-avatar {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+
+    .ai-name {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .ai-desc {
+      font-size: 12px;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    .journal-count {
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    /* Quick prompts */
+    .prompts-card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 15px rgba(124,58,237,0.08);
+    }
+
+    .prompts-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #4c1d95;
+      margin-bottom: 10px;
+    }
+
+    .prompt-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #e9d5ff;
+      background: #faf5ff;
+      color: #4c1d95;
+      font-size: 12px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+
+    .prompt-btn:hover {
+      background: #f3e8ff;
+      border-color: #c4b5fd;
+    }
+
+    /* ── Chat Window ── */
+    .chat-window {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.08);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* Chat header */
+    .chat-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f3e8ff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .chat-header-avatar { font-size: 28px; }
+
+    .chat-header-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #4c1d95;
+    }
+
+    .chat-header-status {
+      font-size: 11px;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #16a34a;
+      border-radius: 50%;
+    }
+
+    .clear-chat-btn {
+      margin-left: auto;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #e9d5ff;
+      background: transparent;
+      color: #9ca3af;
+      font-size: 12px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .clear-chat-btn:hover {
+      background: #fee2e2;
+      color: #dc2626;
+      border-color: #fca5a5;
+    }
+
+    /* Messages area */
+    .messages-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Message bubbles */
+    .message {
+      display: flex;
+      gap: 8px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+
+    .ai-avatar-sm {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+    }
+
+    .user-avatar-sm {
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    }
+
+    .message-bubble {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .message.ai .message-bubble {
+      background: #faf5ff;
+      color: #1f2937;
+      border-bottom-left-radius: 4px;
+      border: 1px solid #f3e8ff;
+    }
+
+    .message.user .message-bubble {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-time {
+      font-size: 10px;
+      color: #9ca3af;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .message.ai .message-time { text-align: left; }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+      background: #faf5ff;
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      border: 1px solid #f3e8ff;
+    }
+
+    .typing-dots span {
+      width: 6px;
+      height: 6px;
+      background: #c4b5fd;
+      border-radius: 50%;
+      animation: bounce 0.8s infinite alternate;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    /* Input area */
+    .input-area {
+      padding: 16px 20px;
+      border-top: 1px solid #f3e8ff;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    .message-input {
+      flex: 1;
+      padding: 12px 18px;
+      border-radius: 24px;
+      border: 1px solid #e9d5ff;
+      background: #faf5ff;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      color: #1f2937;
+      outline: none;
+      resize: none;
+      min-height: 44px;
+      max-height: 120px;
+      transition: border 0.2s;
+      line-height: 1.5;
+    }
+
+    .message-input:focus {
+      border-color: #7c3aed;
+      background: white;
+    }
+
+    .message-input::placeholder {
+      color: #c4b5fd;
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(124,58,237,0.3);
+    }
+
+    .send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(124,58,237,0.4);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── Mobile Bottom Nav ── */
+    .bottom-nav { display: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-header { display: flex !important; }
+
+      .main-content {
+        margin-left: 0;
+        padding: 16px;
+        padding-bottom: 80px;
+        height: auto;
+      }
+
+      .chat-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+
+      .left-panel { display: none; }
+
+      .chat-window {
+        height: 70vh;
+      }
+
+      .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(243,240,255,0.97);
+        backdrop-filter: blur(10px);
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0 16px;
+        border-top: 1px solid #e9d5ff;
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        text-decoration: none;
+        color: #9ca3af;
+        font-size: 10px;
+        font-weight: 500;
+      }
+
+      .nav-item.active { color: #7c3aed; }
+      .nav-icon { font-size: 22px; }
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); opacity: 0.4; }
+      to   { transform: translateY(-5px); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../assets/logo.png" alt="Dear Mind" />
+      <span>Dear Mind 💭</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="./home.html" class="sidebar-item">
+        <span>🏠</span> Home
+      </a>
+      <a href="./journal.html" class="sidebar-item">
+        <span>✍️</span> Write Journal
+      </a>
+      <a href="./dashboard.html" class="sidebar-item">
+        <span>📊</span> Dashboard
+      </a>
+      <a href="./history.html" class="sidebar-item">
+        <span>📋</span> History
+      </a>
+      <a href="./chat.html" class="sidebar-item active">
+        <span>🤖</span> Nova - Chatbot
+      </a>
+    </nav>
+    <button class="sidebar-logout" onclick="handleLogout()">
+      <span>🚪</span> Logout
+    </button>
+  </aside>
+
+  <!-- ── Mobile Header ── -->
+  <div class="mobile-header">
+    <img src="../assets/logo.png" alt="Dear Mind" />
+    <span>Dear Mind 💭</span>
+  </div>
+
+  <!-- ── Main Content ── -->
+  <main class="main-content">
+
+    <h1 class="page-title">🤖 Nova</h1>
+    <p class="page-sub">Talk to your personal mental wellness companion</p>
+
+    <div class="chat-layout">
+
+      <!-- ── Left Panel ── -->
+      <div class="left-panel">
+
+        <!-- AI Info -->
+        <div class="ai-card">
+          <div class="ai-avatar">🧘</div>
+          <div class="ai-name">Dear Mind - Nova</div>
+          <div class="ai-desc">
+            Your compassionate journal companion. I've read your entries and understand your emotional patterns.
+          </div>
+          <div class="journal-count" id="journal-count">
+            📓 Loading your journals...
+          </div>
+        </div>
+
+        <!-- Quick Prompts -->
+        <div class="prompts-card">
+          <p class="prompts-title">💬 Quick Prompts</p>
+          <button class="prompt-btn"
+            onclick="usePrompt('How have I been feeling lately?')">
+            How have I been feeling lately?
+          </button>
+          <button class="prompt-btn"
+            onclick="usePrompt('What patterns do you see in my emotions?')">
+            What patterns do you see in my emotions?
+          </button>
+          <button class="prompt-btn"
+            onclick="usePrompt('Give me some tips to improve my mood')">
+            Give me tips to improve my mood
+          </button>
+          <button class="prompt-btn"
+            onclick="usePrompt('I am feeling stressed today, what should I do?')">
+            I am feeling stressed today
+          </button>
+          <button class="prompt-btn"
+            onclick="usePrompt('Can you summarize my recent journal entries?')">
+            Summarize my recent entries
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ── Chat Window ── -->
+      <div class="chat-window">
+
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <span class="chat-header-avatar">🧘</span>
+          <div>
+            <div class="chat-header-name">Dear Mind - Nova</div>
+            <div class="chat-header-status">
+              <div class="status-dot"></div>
+              Online • Reads your journals
+            </div>
+          </div>
+          <button class="clear-chat-btn" onclick="clearChat()">
+            🗑️ Clear
+          </button>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-area" id="messages-area">
+          <!-- Welcome message -->
+          <div class="message ai">
+            <div class="message-avatar ai-avatar-sm">🧘</div>
+            <div>
+              <div class="message-bubble">
+                Hi! I'm Nova your Dear Mind AI companion 🌸 I've read all your journal entries and I'm here to help you reflect, understand your emotions, or just talk. What's on your mind?
+              </div>
+              <div class="message-time">Just now</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+          <textarea
+            class="message-input"
+            id="message-input"
+            placeholder="Type your message..."
+            rows="1"
+            onkeydown="handleKeyDown(event)"
+            oninput="autoResize(this)"
+          ></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()">
+            ➤
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Mobile Bottom Nav -->
+<nav class="bottom-nav">
+  <a href="./home.html" class="nav-item">
+    <span class="nav-icon">🏠</span> Home
+  </a>
+  <a href="./journal.html" class="nav-item">
+    <span class="nav-icon">✍️</span> Write
+  </a>
+  <a href="./dashboard.html" class="nav-item">
+    <span class="nav-icon">📊</span> Stats
+  </a>
+  <a href="./history.html" class="nav-item">
+    <span class="nav-icon">📋</span> History
+  </a>
+  <a href="./chat.html" class="nav-item active">
+    <span class="nav-icon">🤖</span> Nova
+  </a>
+</nav>
+
+<script type="module">
+  import { sendChatMessage, getJournals } from '../js/api.js';
+  import { requireAuth, getUser, logout } from '../js/auth.js';
+
+  requireAuth();
+
+  window.handleLogout = () => logout();
+
+  // Chat history
+  let messages = [];
+
+  // Load journal count
+  const loadJournalCount = async () => {
+    try {
+      const journals = await getJournals();
+      document.getElementById('journal-count').textContent =
+        `📓 ${journals.length} journal ${journals.length === 1 ? 'entry' : 'entries'} in context`;
+    } catch (e) {
+      document.getElementById('journal-count').textContent =
+        '📓 Journal context loaded';
+    }
+  };
+
+  loadJournalCount();
+
+  // Get current time
+  const getTime = () => new Date().toLocaleTimeString('en-IN', {
+    hour: '2-digit', minute: '2-digit'
+  });
+
+  // Add message to UI
+  const addMessage = (role, content) => {
+    const area = document.getElementById('messages-area');
+    const isUser = role === 'user';
+
+    const div = document.createElement('div');
+    div.className = `message ${isUser ? 'user' : 'ai'}`;
+    div.innerHTML = `
+      <div class="message-avatar ${isUser ? 'user-avatar-sm' : 'ai-avatar-sm'}">
+        ${isUser ? '👤' : '🧘'}
+      </div>
+      <div>
+        <div class="message-bubble">${content}</div>
+        <div class="message-time">${getTime()}</div>
+      </div>`;
+
+    area.appendChild(div);
+    area.scrollTop = area.scrollHeight;
+  };
+
+  // Show typing indicator
+  const showTyping = () => {
+    const area = document.getElementById('messages-area');
+    const div = document.createElement('div');
+    div.className = 'message ai';
+    div.id = 'typing-indicator';
+    div.innerHTML = `
+      <div class="message-avatar ai-avatar-sm">🧘</div>
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
+      </div>`;
+    area.appendChild(div);
+    area.scrollTop = area.scrollHeight;
+  };
+
+  // Hide typing indicator
+  const hideTyping = () => {
+    const el = document.getElementById('typing-indicator');
+    if (el) el.remove();
+  };
+
+  // Send message
+  window.sendMessage = async () => {
+    const input = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    // Add user message
+    addMessage('user', text);
+    messages.push({ role: 'user', content: text });
+
+    // Clear input
+    input.value = '';
+    input.style.height = 'auto';
+
+    // Disable button + show typing
+    sendBtn.disabled = true;
+    showTyping();
+
+    try {
+      const data = await sendChatMessage(messages);
+
+      hideTyping();
+
+      if (data.reply) {
+        addMessage('ai', data.reply);
+        messages.push({ role: 'assistant', content: data.reply });
+      } else {
+        addMessage('ai', 'Sorry, I could not respond right now. Please try again.');
+      }
+    } catch (e) {
+      hideTyping();
+      addMessage('ai', 'Something went wrong. Please check your connection and try again.');
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  };
+
+  // Use quick prompt
+  window.usePrompt = (prompt) => {
+    const input = document.getElementById('message-input');
+    input.value = prompt;
+    input.focus();
+    autoResize(input);
+  };
+
+  // Clear chat
+  window.clearChat = () => {
+    messages = [];
+    const area = document.getElementById('messages-area');
+    area.innerHTML = `
+      <div class="message ai">
+        <div class="message-avatar ai-avatar-sm">🧘</div>
+        <div>
+          <div class="message-bubble">
+            Chat cleared! I'm still here and ready to talk 🌸 What's on your mind?
+          </div>
+          <div class="message-time">${getTime()}</div>
+        </div>
+      </div>`;
+  };
+
+  // Enter key to send
+  window.handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  // Auto resize textarea
+  window.autoResize = (el) => {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  };
+</script>
+
+</body>
+</html>

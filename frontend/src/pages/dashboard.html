@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dear Mind - Dashboard</title>
+  <link rel="icon" type="image/png" href="../assets/logo.png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: #f3f0ff;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px;
+      background: linear-gradient(160deg, #4c1d95, #7c3aed);
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .sidebar-logo img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .sidebar-logo span {
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    .sidebar-item.active {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-weight: 700;
+    }
+
+    .sidebar-logout {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      width: 100%;
+    }
+
+    .sidebar-logout:hover {
+      background: rgba(255,0,0,0.15);
+      color: #fca5a5;
+    }
+
+    /* ── Mobile Header ── */
+    .mobile-header {
+      display: none;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      padding: 16px 20px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mobile-header img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .mobile-header span {
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    /* ── Main Content ── */
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 30px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #4c1d95;
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Stat Cards ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(124,58,237,0.08);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .stat-card:hover { transform: translateY(-3px); }
+
+    .stat-icon { font-size: 30px; margin-bottom: 8px; }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #7c3aed;
+      text-transform: capitalize;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    /* ── Charts Grid ── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.08);
+    }
+
+    .chart-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #4c1d95;
+      margin-bottom: 20px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 220px;
+    }
+
+    /* ── Bottom Grid ── */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* ── Emotion Distribution ── */
+    .emotion-bar-wrap { margin-bottom: 10px; }
+
+    .emotion-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .emotion-bar-bg {
+      height: 8px;
+      background: #f3e8ff;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .emotion-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+
+    /* ── Sentiment Split ── */
+    .sentiment-item {
+      margin-bottom: 14px;
+    }
+
+    .sentiment-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #4b5563;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .sentiment-bar-bg {
+      height: 10px;
+      background: #f3f4f6;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .sentiment-bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 1s ease;
+    }
+
+    /* ── Today's Mood ── */
+    .mood-insight {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      background: #faf5ff;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      border: 1px solid #e9d5ff;
+    }
+
+    .mood-emoji { font-size: 48px; }
+
+    .mood-label {
+      font-size: 20px;
+      font-weight: 800;
+      color: #4c1d95;
+      text-transform: capitalize;
+    }
+
+    .mood-sub {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #9ca3af;
+    }
+
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+    /* Loader */
+    .loader {
+      text-align: center;
+      padding: 40px;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #e9d5ff;
+      border-top-color: #7c3aed;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    /* ── Mobile Bottom Nav ── */
+    .bottom-nav { display: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-header { display: flex !important; }
+
+      .main-content {
+        margin-left: 0;
+        padding: 16px;
+        padding-bottom: 90px;
+      }
+
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .charts-grid { grid-template-columns: 1fr; }
+      .bottom-grid { grid-template-columns: 1fr; }
+
+      .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(243,240,255,0.97);
+        backdrop-filter: blur(10px);
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0 16px;
+        border-top: 1px solid #e9d5ff;
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        text-decoration: none;
+        color: #9ca3af;
+        font-size: 10px;
+        font-weight: 500;
+      }
+
+      .nav-item.active { color: #7c3aed; }
+      .nav-icon { font-size: 22px; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../assets/logo.png" alt="Dear Mind" />
+      <span>Dear Mind 💭</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="./home.html" class="sidebar-item">
+        <span>🏠</span> Home
+      </a>
+      <a href="./journal.html" class="sidebar-item">
+        <span>✍️</span> Write Journal
+      </a>
+      <a href="./dashboard.html" class="sidebar-item active">
+        <span>📊</span> Dashboard
+      </a>
+      <a href="./history.html" class="sidebar-item">
+        <span>📋</span> History
+      </a>
+      <a href="./chat.html" class="sidebar-item">
+        <span>🤖</span> Nova - Chatbot
+      </a>
+    </nav>
+    <button class="sidebar-logout" onclick="handleLogout()">
+      <span>🚪</span> Logout
+    </button>
+  </aside>
+
+  <!-- ── Mobile Header ── -->
+  <div class="mobile-header">
+    <img src="../assets/logo.png" alt="Dear Mind" />
+    <span>Dear Mind 💭</span>
+  </div>
+
+  <!-- ── Main Content ── -->
+  <main class="main-content">
+
+    <h1 class="page-title">📊 Dashboard</h1>
+    <p class="page-sub">Your emotional journey at a glance</p>
+
+    <!-- Loader -->
+    <div id="main-loader">
+      <div class="loader">
+        <div class="spinner"></div>
+        Loading your data...
+      </div>
+    </div>
+
+    <!-- Content (hidden until loaded) -->
+    <div id="dashboard-content" style="display:none;">
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon">📓</div>
+          <div class="stat-value" id="total-entries">0</div>
+          <div class="stat-label">Total Entries</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🧠</div>
+          <div class="stat-value" id="avg-sentiment">0</div>
+          <div class="stat-label">Avg Sentiment</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💜</div>
+          <div class="stat-value" id="dominant-emotion">-</div>
+          <div class="stat-label">Top Emotion</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✨</div>
+          <div class="stat-value" id="positive-pct">0%</div>
+          <div class="stat-label">Positive Days</div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+
+        <!-- Sentiment Trend Line Chart -->
+        <div class="chart-card">
+          <p class="chart-title">📈 Mood Trend</p>
+          <div class="chart-wrap">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Sentiment Split Doughnut -->
+        <div class="chart-card">
+          <p class="chart-title">🎯 Sentiment Split</p>
+          <div class="chart-wrap">
+            <canvas id="splitChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Grid -->
+      <div class="bottom-grid">
+
+        <!-- Emotion Distribution -->
+        <div class="chart-card">
+          <p class="chart-title">💜 Emotion Distribution</p>
+          <div id="emotion-bars"></div>
+        </div>
+
+        <!-- Today's Dominant Mood + AI Insights -->
+        <div class="chart-card">
+          <p class="chart-title">🌸 AI Journal Insights</p>
+
+          <div class="mood-insight">
+            <span class="mood-emoji" id="mood-emoji">😐</span>
+            <div>
+              <div class="mood-label" id="mood-label">neutral</div>
+              <div class="mood-sub">Your dominant emotion</div>
+            </div>
+          </div>
+
+          <!-- Sentiment split bars -->
+          <div id="sentiment-bars"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" style="display:none;">
+      <div class="chart-card">
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <p>No journal entries yet.<br/>
+          <a href="./journal.html" style="color:#7c3aed; font-weight:700;">
+            Write your first entry!
+          </a></p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Mobile Bottom Nav -->
+<nav class="bottom-nav">
+  <a href="./home.html" class="nav-item">
+    <span class="nav-icon">🏠</span> Home
+  </a>
+  <a href="./journal.html" class="nav-item">
+    <span class="nav-icon">✍️</span> Write
+  </a>
+  <a href="./dashboard.html" class="nav-item active">
+    <span class="nav-icon">📊</span> Stats
+  </a>
+  <a href="./history.html" class="nav-item">
+    <span class="nav-icon">📋</span> History
+  </a>
+  <a href="./chat.html" class="nav-item">
+    <span class="nav-icon">🤖</span> Nova
+  </a>
+</nav>
+
+<script type="module">
+  import { getDashboard } from '../js/api.js';
+  import { requireAuth, logout } from '../js/auth.js';
+  import { getEmotionEmoji, getEmotionColor } from '../js/utils.js';
+
+  requireAuth();
+
+  window.handleLogout = () => logout();
+
+  const loadDashboard = async () => {
+    try {
+      const data = await getDashboard();
+
+      document.getElementById('main-loader').style.display = 'none';
+
+      if (data.totalEntries === 0) {
+        document.getElementById('empty-state').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('dashboard-content').style.display = 'block';
+
+      // ── Stat Cards ──
+      document.getElementById('total-entries').textContent =
+        data.totalEntries;
+      document.getElementById('avg-sentiment').textContent =
+        data.averageSentiment > 0
+          ? `+${data.averageSentiment}`
+          : data.averageSentiment;
+      document.getElementById('dominant-emotion').textContent =
+        getEmotionEmoji(data.dominantEmotion) + ' ' + data.dominantEmotion;
+      document.getElementById('positive-pct').textContent =
+        `${Math.round((data.sentimentSplit?.Positive || 0) / data.totalEntries * 100)}%`;
+
+      // ── Mood Insight ──
+      document.getElementById('mood-emoji').textContent =
+        getEmotionEmoji(data.dominantEmotion);
+      document.getElementById('mood-label').textContent =
+        data.dominantEmotion;
+
+      // ── Sentiment Trend Line Chart ──
+      const trend = data.sentimentTrend || [];
+      const trendCtx = document.getElementById('trendChart').getContext('2d');
+      new Chart(trendCtx, {
+        type: 'line',
+        data: {
+          labels: trend.map(t =>
+            new Date(t.date).toLocaleDateString('en-IN', {
+              day: 'numeric', month: 'short'
+            })
+          ),
+          datasets: [{
+            label: 'Sentiment Score',
+            data: trend.map(t => t.score),
+            borderColor: '#7c3aed',
+            backgroundColor: 'rgba(124,58,237,0.1)',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#7c3aed',
+            pointRadius: 4,
+            tension: 0.4,
+            fill: true,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+          },
+          scales: {
+            y: {
+              min: -100,
+              max: 100,
+              grid: { color: '#f3e8ff' },
+              ticks: { color: '#9ca3af', font: { size: 11 } },
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#9ca3af', font: { size: 10 } },
+            }
+          }
+        }
+      });
+
+      // ── Sentiment Split Doughnut ──
+      const split = data.sentimentSplit || {};
+      const splitCtx = document.getElementById('splitChart').getContext('2d');
+      new Chart(splitCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Positive', 'Neutral', 'Negative'],
+          datasets: [{
+            data: [
+              split.Positive || 0,
+              split.Neutral  || 0,
+              split.Negative || 0
+            ],
+            backgroundColor: ['#16a34a', '#9ca3af', '#dc2626'],
+            borderWidth: 0,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: '#4b5563',
+                font: { size: 12 },
+                padding: 16,
+              }
+            }
+          },
+          cutout: '65%',
+        }
+      });
+
+      // ── Emotion Distribution Bars ──
+      const dist = data.emotionDistribution || {};
+      const barsContainer = document.getElementById('emotion-bars');
+      barsContainer.innerHTML = Object.entries(dist)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6)
+        .map(([em, pct]) => `
+          <div class="emotion-bar-wrap">
+            <div class="emotion-bar-header">
+              <span>${getEmotionEmoji(em)} ${em}</span>
+              <span>${pct}%</span>
+            </div>
+            <div class="emotion-bar-bg">
+              <div class="emotion-bar-fill"
+                style="width:${pct}%; background:${getEmotionColor(em)};">
+              </div>
+            </div>
+          </div>`).join('');
+
+      // ── Sentiment Split Bars ──
+      const sentBarsContainer = document.getElementById('sentiment-bars');
+      const total = data.totalEntries;
+      sentBarsContainer.innerHTML = [
+        { label: 'Positive', count: split.Positive || 0, color: '#16a34a' },
+        { label: 'Neutral',  count: split.Neutral  || 0, color: '#9ca3af' },
+        { label: 'Negative', count: split.Negative || 0, color: '#dc2626' },
+      ].map(s => `
+        <div class="sentiment-item">
+          <div class="sentiment-header">
+            <span>${s.label}</span>
+            <span>${s.count} entries</span>
+          </div>
+          <div class="sentiment-bar-bg">
+            <div class="sentiment-bar-fill"
+              style="width:${total ? s.count/total*100 : 0}%;
+                     background:${s.color};">
+            </div>
+          </div>
+        </div>`).join('');
+
+    } catch (e) {
+      document.getElementById('main-loader').innerHTML =
+        '<div class="loader">Failed to load dashboard. Please try again.</div>';
+      console.error('Dashboard error:', e);
+    }
+  };
+
+  loadDashboard();
+</script>
+
+</body>
+</html>
