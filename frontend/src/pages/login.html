@@ -13,14 +13,13 @@
     body {
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #1a0533 0%, #4a1070 40%, #7c3aed 70%, #b06fd4 100%);
+      background: linear-gradient(135deg, #3b0764 0%, #5b21b6 40%, #7c3aed 70%, #a78bfa 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
     }
 
-    /* ── Decorative circles ── */
     .circle {
       position: fixed;
       border-radius: 50%;
@@ -28,11 +27,10 @@
       pointer-events: none;
     }
     .c1 { width:300px; height:300px; top:-100px; left:-100px; }
-    .c2 { width:180px; height:180px; top:20px;   left:20px;   border-color: rgba(255,255,255,0.12); }
+    .c2 { width:180px; height:180px; top:20px; left:20px; border-color: rgba(255,255,255,0.12); }
     .c3 { width:350px; height:350px; bottom:-120px; right:-120px; }
-    .c4 { width:200px; height:200px; bottom:-40px;  right:-40px;  border-color: rgba(255,255,255,0.12); }
+    .c4 { width:200px; height:200px; bottom:-40px; right:-40px; border-color: rgba(255,255,255,0.12); }
 
-    /* ── Main wrapper ── */
     .wrapper {
       width: 95%;
       max-width: 900px;
@@ -40,15 +38,14 @@
       display: flex;
       border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
       position: relative;
       z-index: 1;
     }
 
-    /* ── Left Panel ── */
     .left-panel {
       width: 42%;
-      background: linear-gradient(160deg, #6d28d9 0%, #4c1d95 50%, #2d1b69 100%);
+      background: linear-gradient(160deg, #5b21b6 0%, #4c1d95 50%, #3b0764 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -81,7 +78,7 @@
       width: 110px;
       height: 110px;
       object-fit: contain;
-      filter: drop-shadow(0 0 20px rgba(200,150,255,0.6));
+      filter: drop-shadow(0 0 20px rgba(196,181,253,0.5));
       animation: pulse 2s infinite;
       z-index: 1;
     }
@@ -103,7 +100,6 @@
       z-index: 1;
     }
 
-    /* Toggle buttons on left */
     .toggle-btns {
       display: flex;
       flex-direction: column;
@@ -129,7 +125,7 @@
       background: white;
       color: #7c3aed;
       border: none;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
     .toggle-btn.inactive {
@@ -143,36 +139,26 @@
       color: white;
     }
 
-    /* ── Right Panel ── */
     .right-panel {
       flex: 1;
-      background: rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.08);
       backdrop-filter: blur(20px);
       padding: 48px 40px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       border-left: 1px solid rgba(255,255,255,0.1);
-      position: relative;
-      overflow: hidden;
     }
 
-    /* Forms */
     .form-section {
       display: none;
       flex-direction: column;
       animation: fadeIn 0.4s ease;
     }
 
-    .form-section.active {
-      display: flex;
-    }
+    .form-section.active { display: flex; }
 
-    .form-icon {
-      font-size: 42px;
-      text-align: center;
-      margin-bottom: 8px;
-    }
+    .form-icon { font-size: 42px; text-align: center; margin-bottom: 8px; }
 
     .form-title {
       color: white;
@@ -183,20 +169,17 @@
       margin-bottom: 32px;
     }
 
-    /* Input group */
     .input-group {
       display: flex;
       align-items: center;
       gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.25);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
       margin-bottom: 24px;
       padding-bottom: 10px;
       transition: border-color 0.2s;
     }
 
-    .input-group:focus-within {
-      border-bottom-color: #e0aaff;
-    }
+    .input-group:focus-within { border-bottom-color: #c4b5fd; }
 
     .input-icon { font-size: 18px; opacity: 0.7; }
 
@@ -210,11 +193,8 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    .input-group input::placeholder {
-      color: rgba(255,255,255,0.35);
-    }
+    .input-group input::placeholder { color: rgba(255,255,255,0.35); }
 
-    /* Bottom row */
     .bottom-row {
       display: flex;
       justify-content: space-between;
@@ -222,30 +202,26 @@
       margin-top: 8px;
     }
 
-    .forgot {
-      color: #e0aaff;
-      font-size: 12px;
-      cursor: pointer;
-    }
+    .forgot { color: #c4b5fd; font-size: 12px; cursor: pointer; }
 
     .submit-btn {
       padding: 12px 32px;
       border-radius: 30px;
       border: none;
-      background: linear-gradient(135deg, #c084fc, #7c3aed);
+      background: linear-gradient(135deg, #a78bfa, #7c3aed);
       color: white;
       font-weight: 700;
       font-size: 14px;
       font-family: 'Poppins', sans-serif;
       cursor: pointer;
       letter-spacing: 1px;
-      box-shadow: 0 4px 20px rgba(124,58,237,0.5);
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
       transition: all 0.2s;
     }
 
     .submit-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(124,58,237,0.6);
+      box-shadow: 0 6px 24px rgba(124,58,237,0.5);
     }
 
     .submit-btn:disabled {
@@ -254,7 +230,6 @@
       transform: none;
     }
 
-    /* Divider */
     .divider {
       display: flex;
       align-items: center;
@@ -268,10 +243,7 @@
       background: rgba(255,255,255,0.15);
     }
 
-    .divider-text {
-      color: rgba(255,255,255,0.4);
-      font-size: 11px;
-    }
+    .divider-text { color: rgba(255,255,255,0.4); font-size: 11px; }
 
     .social-btn {
       display: flex;
@@ -292,7 +264,6 @@
 
     .social-btn:hover { background: rgba(255,255,255,0.12); }
 
-    /* Error */
     .error-msg {
       display: none;
       color: #fca5a5;
@@ -304,7 +275,6 @@
       border-radius: 10px;
     }
 
-    /* Success */
     .success-msg {
       display: none;
       color: #86efac;
@@ -316,7 +286,6 @@
       border-radius: 10px;
     }
 
-    /* Animations */
     @keyframes pulse {
       0%,100% { transform: scale(1); }
       50% { transform: scale(1.05); }
@@ -327,127 +296,82 @@
       to   { opacity: 1; transform: translateX(0); }
     }
 
-    /* Mobile responsive */
     @media (max-width: 600px) {
-      .wrapper {
-        flex-direction: column;
-        min-height: 100vh;
-        border-radius: 0;
-        width: 100%;
-      }
-      .left-panel {
-        width: 100%;
-        min-height: auto;
-        padding: 30px 20px;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      .toggle-btns {
-        flex-direction: row;
-        margin-top: 10px;
-      }
+      .wrapper { flex-direction: column; min-height: 100vh; border-radius: 0; width: 100%; }
+      .left-panel { width: 100%; min-height: auto; padding: 30px 20px; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .toggle-btns { flex-direction: row; margin-top: 10px; }
       .right-panel { padding: 32px 24px; }
     }
   </style>
 </head>
 <body>
-
-  <!-- Decorative circles -->
   <div class="circle c1"></div>
   <div class="circle c2"></div>
   <div class="circle c3"></div>
   <div class="circle c4"></div>
 
   <div class="wrapper">
-
-    <!-- ── Left Panel ── -->
     <div class="left-panel">
       <img src="../assets/logo.png" alt="Dear Mind" class="logo" />
       <h1 class="app-name">DEAR MIND</h1>
       <p class="app-tagline">💭 Your safe space to reflect</p>
-
       <div class="toggle-btns">
-        <div class="toggle-btn active" id="btn-login" onclick="showLogin()">
-          SIGN IN
-        </div>
-        <div class="toggle-btn inactive" id="btn-register" onclick="showRegister()">
-          SIGN UP
-        </div>
+        <div class="toggle-btn active" id="btn-login" onclick="showLogin()">SIGN IN</div>
+        <div class="toggle-btn inactive" id="btn-register" onclick="showRegister()">SIGN UP</div>
       </div>
     </div>
 
-    <!-- ── Right Panel ── -->
     <div class="right-panel">
-
-      <!-- LOGIN FORM -->
+      <!-- LOGIN -->
       <div class="form-section active" id="login-form">
         <div class="form-icon">👤</div>
         <h2 class="form-title">LOGIN</h2>
-
         <p class="error-msg" id="login-error"></p>
-
         <div class="input-group">
           <span class="input-icon">📧</span>
           <input type="email" id="login-email" placeholder="Email" />
         </div>
-
         <div class="input-group">
           <span class="input-icon">🔒</span>
           <input type="password" id="login-password" placeholder="Password" />
         </div>
-
         <div class="bottom-row">
           <span class="forgot">Forgot Password?</span>
-          <button class="submit-btn" id="login-btn" onclick="handleLogin()">
-            LOGIN
-          </button>
+          <button class="submit-btn" id="login-btn" onclick="handleLogin()">LOGIN</button>
         </div>
-
         <div class="divider">
           <div class="divider-line"></div>
           <span class="divider-text">Or Login With</span>
           <div class="divider-line"></div>
         </div>
-
         <button class="social-btn">
           <img src="https://www.google.com/favicon.ico" width="16" /> Google
         </button>
       </div>
 
-      <!-- REGISTER FORM -->
+      <!-- REGISTER -->
       <div class="form-section" id="register-form">
         <div class="form-icon">🌸</div>
         <h2 class="form-title">CREATE ACCOUNT</h2>
-
         <p class="error-msg" id="register-error"></p>
         <p class="success-msg" id="register-success"></p>
-
         <div class="input-group">
           <span class="input-icon">👤</span>
           <input type="text" id="reg-name" placeholder="Full Name" />
         </div>
-
         <div class="input-group">
           <span class="input-icon">📧</span>
           <input type="email" id="reg-email" placeholder="Email" />
         </div>
-
         <div class="input-group">
           <span class="input-icon">🔒</span>
           <input type="password" id="reg-password" placeholder="Password" />
         </div>
-
         <div class="bottom-row">
-          <span class="forgot" onclick="showLogin()" style="cursor:pointer;">
-            Already have account?
-          </span>
-          <button class="submit-btn" id="register-btn" onclick="handleRegister()">
-            SIGN UP
-          </button>
+          <span class="forgot" onclick="showLogin()">Already have account?</span>
+          <button class="submit-btn" id="register-btn" onclick="handleRegister()">SIGN UP</button>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -455,10 +379,8 @@
     import { loginUser, registerUser } from '../js/api.js';
     import { saveAuth, isLoggedIn } from '../js/auth.js';
 
-    // Already logged in → go home
     if (isLoggedIn()) window.location.href = './home.html';
 
-    // ── Toggle between Login and Register ──
     window.showLogin = () => {
       document.getElementById('login-form').classList.add('active');
       document.getElementById('register-form').classList.remove('active');
@@ -473,43 +395,22 @@
       document.getElementById('btn-login').className = 'toggle-btn inactive';
     };
 
-    // ── Handle Login ──
     window.handleLogin = async () => {
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value.trim();
       const btn = document.getElementById('login-btn');
       const err = document.getElementById('login-error');
-
       err.style.display = 'none';
-
-      if (!email || !password) {
-        err.textContent = 'Please fill in all fields.';
-        err.style.display = 'block';
-        return;
-      }
-
-      btn.textContent = 'Loading...';
-      btn.disabled = true;
-
+      if (!email || !password) { err.textContent = 'Please fill in all fields.'; err.style.display = 'block'; return; }
+      btn.textContent = 'Loading...'; btn.disabled = true;
       try {
         const data = await loginUser(email, password);
-        if (data.token) {
-          saveAuth(data.token, { name: data.name, email: data.email });
-          window.location.href = './home.html';
-        } else {
-          err.textContent = data.message || 'Login failed.';
-          err.style.display = 'block';
-        }
-      } catch (e) {
-        err.textContent = 'Something went wrong.';
-        err.style.display = 'block';
-      } finally {
-        btn.textContent = 'LOGIN';
-        btn.disabled = false;
-      }
+        if (data.token) { saveAuth(data.token, { name: data.name, email: data.email }); window.location.href = './home.html'; }
+        else { err.textContent = data.message || 'Login failed.'; err.style.display = 'block'; }
+      } catch (e) { err.textContent = 'Something went wrong.'; err.style.display = 'block'; }
+      finally { btn.textContent = 'LOGIN'; btn.disabled = false; }
     };
 
-    // ── Handle Register ──
     window.handleRegister = async () => {
       const name = document.getElementById('reg-name').value.trim();
       const email = document.getElementById('reg-email').value.trim();
@@ -517,54 +418,23 @@
       const btn = document.getElementById('register-btn');
       const err = document.getElementById('register-error');
       const success = document.getElementById('register-success');
-
-      err.style.display = 'none';
-      success.style.display = 'none';
-
-      if (!name || !email || !password) {
-        err.textContent = 'Please fill in all fields.';
-        err.style.display = 'block';
-        return;
-      }
-
-      if (password.length < 6) {
-        err.textContent = 'Password must be at least 6 characters.';
-        err.style.display = 'block';
-        return;
-      }
-
-      btn.textContent = 'Creating...';
-      btn.disabled = true;
-
+      err.style.display = 'none'; success.style.display = 'none';
+      if (!name || !email || !password) { err.textContent = 'Please fill in all fields.'; err.style.display = 'block'; return; }
+      if (password.length < 6) { err.textContent = 'Password must be at least 6 characters.'; err.style.display = 'block'; return; }
+      btn.textContent = 'Creating...'; btn.disabled = true;
       try {
         const data = await registerUser(name, email, password);
-        if (data.id || data._id) {
-          success.textContent = 'Account created! Please login.';
-          success.style.display = 'block';
-          setTimeout(() => showLogin(), 1500);
-        } else {
-          err.textContent = data.message || 'Registration failed.';
-          err.style.display = 'block';
-        }
-      } catch (e) {
-        err.textContent = 'Something went wrong.';
-        err.style.display = 'block';
-      } finally {
-        btn.textContent = 'SIGN UP';
-        btn.disabled = false;
-      }
+        if (data.id || data._id) { success.textContent = 'Account created! Please login.'; success.style.display = 'block'; setTimeout(() => showLogin(), 1500); }
+        else { err.textContent = data.message || 'Registration failed.'; err.style.display = 'block'; }
+      } catch (e) { err.textContent = 'Something went wrong.'; err.style.display = 'block'; }
+      finally { btn.textContent = 'SIGN UP'; btn.disabled = false; }
     };
 
-    // Enter key support
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter') return;
-      if (document.getElementById('login-form').classList.contains('active')) {
-        handleLogin();
-      } else {
-        handleRegister();
-      }
+      if (document.getElementById('login-form').classList.contains('active')) handleLogin();
+      else handleRegister();
     });
   </script>
-
 </body>
-</html>
+</html> 

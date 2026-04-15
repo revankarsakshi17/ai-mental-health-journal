@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dear Mind</title>
+  <link rel="icon" type="image/png" href="../assets/logo.png" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
     body {
-      background: var(--bg-dark-gradient);
+      background: linear-gradient(160deg, #4c1d95 0%, #6d28d9 50%, #8b5cf6 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -21,17 +22,18 @@
       width: 300px;
       height: 300px;
       border-radius: 50%;
-      background: rgba(168, 85, 247, 0.3);
+      background: rgba(167, 139, 250, 0.25);
       filter: blur(80px);
       z-index: 0;
     }
 
     .splash-logo {
-      width: 230px;
-      height: 230px;
+      width: 180px;
+      height: 180px;
       object-fit: contain;
       z-index: 1;
       animation: pulse 2s infinite;
+      filter: drop-shadow(0 0 30px rgba(196,181,253,0.4));
     }
 
     .splash-title {
@@ -44,7 +46,7 @@
     }
 
     .splash-subtitle {
-      color: #e9d5ff;
+      color: #ddd6fe;
       font-size: 16px;
       z-index: 1;
       margin-top: 8px;
@@ -80,6 +82,11 @@
       from { transform: translateY(0); opacity: 0.4; }
       to   { transform: translateY(-6px); opacity: 1; }
     }
+
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
   </style>
 </head>
 <body>
@@ -93,9 +100,7 @@
       <span></span><span></span><span></span>
     </div>
   </div>
-
   <script>
-    // Auto redirect to login after 3 seconds
     setTimeout(() => {
       window.location.href = './login.html';
     }, 3000);
