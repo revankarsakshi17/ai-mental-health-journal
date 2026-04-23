@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import journalRoutes from "./routes/journalRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import moodRoutes from "./routes/moodRoutes.js";
 
 connectDB();
 
@@ -21,6 +22,8 @@ app.use(express.json());
 app.use("/api/users", authRoutes);
 app.use("/api/journal", journalRoutes);
 app.use("/api/ai", aiRoutes);
+// add with other routes
+app.use("/api/mood", moodRoutes);
 
 app.get("/", (req, res) => {
   res.send("Mental Health Journal API Running");

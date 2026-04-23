@@ -77,3 +77,23 @@ export const sendChatMessage = async (messages) => {
   });
   return res.json();
 };
+
+// ── Mood APIs ──────────────────────────────
+export const saveMood = async (mood) => {
+  const res = await fetch(`${BASE_URL}/mood`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify({ mood }),
+  });
+  return res.json();
+};
+
+export const getTodayMood = async () => {
+  const res = await fetch(`${BASE_URL}/mood/today`, {
+    headers: { 'Authorization': `Bearer ${getToken()}` },
+  });
+  return res.json();
+};
