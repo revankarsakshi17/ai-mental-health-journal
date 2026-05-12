@@ -13,7 +13,7 @@
     body {
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #3b0764 0%, #5b21b6 40%, #7c3aed 70%, #a78bfa 100%);
+      background: linear-gradient(135deg, #9941dd 0%, #9055ee 40%, #8b4ff3 70%, #ac93f7 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -45,7 +45,7 @@
 
     .left-panel {
       width: 42%;
-      background: linear-gradient(160deg, #5b21b6 0%, #4c1d95 50%, #3b0764 100%);
+      background: linear-gradient(160deg, #7935e5 0%, #4c1d95 50%, #5b198d 80%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -75,8 +75,8 @@
     }
 
     .logo {
-      width: 110px;
-      height: 110px;
+      width: 250px;
+      height: 250px;
       object-fit: contain;
       filter: drop-shadow(0 0 20px rgba(196,181,253,0.5));
       animation: pulse 2s infinite;
@@ -336,17 +336,19 @@
           <input type="password" id="login-password" placeholder="Password" />
         </div>
         <div class="bottom-row">
+          <a href="./forgotpassword.html" class="forgot">
           <span class="forgot">Forgot Password?</span>
+          </a>
           <button class="submit-btn" id="login-btn" onclick="handleLogin()">LOGIN</button>
         </div>
-        <div class="divider">
+        <!-- <div class="divider">
           <div class="divider-line"></div>
           <span class="divider-text">Or Login With</span>
           <div class="divider-line"></div>
-        </div>
-        <button class="social-btn">
+        </div> -->
+        <!-- <button class="social-btn">
           <img src="https://www.google.com/favicon.ico" width="16" /> Google
-        </button>
+        </button> -->
       </div>
 
       <!-- REGISTER -->
